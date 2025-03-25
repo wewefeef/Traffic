@@ -1,0 +1,16 @@
+# Bỏ qua thư mục môi trường ảo Python
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Bỏ qua file tạm của hệ điều hành
+.DS_Store
+Thumbs.db
+
+# Bỏ qua file log hoặc file tạm khác
+*.log
+*.tmp
+
+# Bỏ qua file cấu hình nhạy cảm (nếu có)
+config.ini

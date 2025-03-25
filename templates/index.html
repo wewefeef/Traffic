@@ -1,0 +1,103 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Detection System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Traffic Detection System</h1>
+        <!-- Hiển thị thông báo lỗi -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="error-message">
+                    {% for message in messages %}
+                        {{ message }}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Form upload video -->
+        <form method="post" enctype="multipart/form-data" action="/upload" onsubmit="return validateForm()">
+            <label for="file">Upload a video to detect traffic violations:</label>
+            <input type="file" id="file" name="file" accept="video/*" required>
+            <button type="submit" id="uploadButton">Upload and Process</button>
+        </form>
+        <div id="processingMessage" style="display: none; color: #555; margin-top: 10px;">
+            Processing... Please wait.
+        </div>
+
+        <!-- Hiển thị thông báo đang xử lý -->
+        {% if processing %}
+        <h2>Processing Video</h2>
+        <p id="statusMessage">Your video is being processed. Please wait...</p>
+        <div id="videoContainer" style="display: none;">
+            <h2>Processed Video</h2>
+            <video width="800" controls>
+                <source id="videoSource" src="{{ url_for('static', filename='videos/' + video_url) }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <script>
+            // Kiểm tra trạng thái xử lý
+            const videoUrl = "{{ video_url }}";
+            const checkStatus = () => {
+                fetch(`/check_status/${videoUrl}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'completed') {
+                            document.getElementById('statusMessage').style.display = 'none';
+                            document.getElementById('videoContainer').style.display = 'block';
+                            // Tải lại nguồn video để đảm bảo hiển thị
+                            const video = document.querySelector('video');
+                            video.load();
+                            video.play();
+                        } else {
+                            // Tiếp tục kiểm tra sau 2 giây
+                            setTimeout(checkStatus, 2000);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error checking status:', error);
+                        document.getElementById('statusMessage').innerText = 'Error checking processing status.';
+                    });
+            };
+
+            // Bắt đầu kiểm tra trạng thái ngay khi trang tải
+            checkStatus();
+        </script>
+        {% endif %}
+
+        <!-- Hiển thị video đã xử lý (trường hợp không cần xử lý lại) -->
+        {% if video_url and not processing %}
+        <h2>Processed Video</h2>
+        <video width="800" controls>
+            <source src="{{ url_for('static', filename='videos/' + video_url) }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        {% endif %}
+    </div>
+
+    <script>
+        function validateForm() {
+            const fileInput = document.getElementById('file');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('Please select a video file before uploading.');
+                return false;
+            }
+            showProcessing();
+            return true;
+        }
+
+        function showProcessing() {
+            document.getElementById('uploadButton').innerText = 'Processing...';
+            document.getElementById('uploadButton').disabled = true;
+            document.getElementById('processingMessage').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
