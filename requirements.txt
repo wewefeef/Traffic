@@ -1,18 +1,13 @@
-Package                   Version
----------------           --------
-flask                    2.0.1
-opencv-python            4.5.5.64
-opencv-python-headless   4.11.0.86
-ultralytics              8.0.0
-moviepy                  1.0.3
-numpy                    1.21.0
-Pillow                   9.0.0
-torch                    1.10.0
-torchvision              0.11.1
-requests                 2.26.0
-tqdm                     4.62.3
-Werkzeug                 2.0.2
-Jinja2                   3.0.3
-...
-
-#4 cái cuối không cần cài cũng được vì nó tự động cài rồi còn nếu không chạy được cứ cài đủ cho chắc
+flask==2.0.1
+opencv-python==4.5.5.64
+opencv-python-headless==4.11.0.86
+ultralytics==8.0.0
+moviepy==1.0.3
+numpy==1.21.0
+Pillow==9.0.0
+torch==1.10.0
+torchvision==0.11.1
+requests==2.26.0
+tqdm==4.64.0
+Werkzeug==2.0.2
+Jinja2==3.0.3

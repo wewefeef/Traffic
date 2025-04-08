@@ -190,6 +190,6 @@ def process_video(input_path, output_path):
     return output_path
 
 if __name__ == "__main__":
-    input_video = "uploads/CN-DB.mp4"
-    output_video = "output_trafic.mp4"
+    input_video = "uploads"
+    output_video = "output"
     process_video(input_video, output_video)
